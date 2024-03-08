@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 // Remove reference to App.css, styles moved to Tailwind
 
 function Home() {
-  console.log("njn");
+  const [loading,setLoading] = useState(false);
   const [city, setCity] = useState("");
   const [weatherData, setWeatherData] = useState(null);
   const [error, setError] = useState(null);
@@ -11,8 +11,9 @@ function Home() {
   const apiKey = "e58cc08c2a2a4646ae385025240803"; // Replace with your actual weather API key
 
   const handlesubmit = (e) => {
+    setLoading(true);
     e.preventDefault();
-    console.log("handlesubmit vhala ");
+  
     try {
       fetch(`http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`)
         .then((response) => {
@@ -23,10 +24,11 @@ function Home() {
         })
         .then((data) => {
           setWeatherData(data);
-          console.log(data);
+          setLoading(false);
         });
     } catch (error) {
-      console.log("mhui jhua");
+      setLoading(false)
+      console.error(error)
     }
   };
   console.log(weatherData);
@@ -52,6 +54,7 @@ function Home() {
         </form>
         {error && <p className="text-red-500 font-bold">{error}</p>}
       </header>
+      {loading && <p className="text-2xl font-blue-500 font-semibold font-sans "> Loading.. </p>}
       {weatherData && (
         <div className="weather-card bg-white rounded-md shadow-md p-4 flex flex-col items-center gap-4">
           <h3>{}</h3>
