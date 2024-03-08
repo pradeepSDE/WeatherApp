@@ -15,7 +15,7 @@ function Home() {
     e.preventDefault();
   
     try {
-      fetch(`http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`)
+      fetch(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`)
         .then((response) => {
           if (!response.ok) {
             throw new Error(`statu: ${response.status}`);
