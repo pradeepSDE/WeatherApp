@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 // Remove reference to App.css, styles moved to Tailwind
 
 function Home() {
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [city, setCity] = useState("");
   const [weatherData, setWeatherData] = useState(null);
   const [error, setError] = useState(null);
@@ -13,12 +13,14 @@ function Home() {
   const handlesubmit = (e) => {
     setLoading(true);
     e.preventDefault();
-  
+
     try {
-      fetch(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`)
+      fetch(
+        `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`
+      )
         .then((response) => {
           if (!response.ok) {
-            throw new Error(`statu: ${response.status}`);
+            throw new Error(`status: ${response.status}`);
           }
           return response.json();
         })
@@ -27,8 +29,8 @@ function Home() {
           setLoading(false);
         });
     } catch (error) {
-      setLoading(false)
-      console.error(error)
+      setLoading(false);
+      console.error(error);
     }
   };
   console.log(weatherData);
@@ -36,7 +38,7 @@ function Home() {
   return (
     <div className=" bg-gray-200 min-h-screen flex flex-col items-center justify-center">
       <header className="App-header flex flex-col items-center p-8">
-        <h1 className="text-2xl font-bold mb-4">Weather App</h1>
+        <h1 className="text-4xl pb-5 font-bold mb-4">Weather App</h1>
         <form className="flex justify-between w-full" onSubmit={handlesubmit}>
           <input
             type="text"
@@ -47,17 +49,22 @@ function Home() {
           />
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
+            className="px-4 py-2 ml-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
           >
             Search
           </button>
         </form>
         {error && <p className="text-red-500 font-bold">{error}</p>}
       </header>
-      {loading && <p className="text-2xl font-blue-500 font-semibold font-sans "> Loading.. </p>}
+      {loading && (
+        <p className="text-2xl font-blue-500 font-semibold font-sans ">
+          {" "}
+          Loading..{" "}
+        </p>
+      )}
       {weatherData && (
         <div className="weather-card bg-white rounded-md shadow-md p-4 flex flex-col items-center gap-4">
-          <h3>{}</h3>
+          <h3 className=" text-2xl font-semibold ">{weatherData.location.name},{weatherData.location.region}</h3>
           <p className="flex items-center gap-2">
             <span className="text-xl">
               {weatherData.current.condition.text}
@@ -70,6 +77,9 @@ function Home() {
           </ul>
         </div>
       )}
+      <div>
+      <h1 className="text-2xl mt-5 p-2 pb-5 font-bold mb-4">By Pradeep_bisen</h1>
+      </div>
     </div>
   );
 }
