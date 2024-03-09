@@ -64,7 +64,7 @@ function Home() {
       )}
       {weatherData && (
         <div className="weather-card bg-white rounded-md shadow-md p-4 flex flex-col items-center gap-4">
-          <h3 className=" text-2xl font-semibold ">{weatherData.location.name},{weatherData.location.region}</h3>
+          <h3 className=" text-2xl font-semibold ">{weatherData.location.name}, {weatherData.location.region}</h3>
           <p className="flex items-center gap-2">
             <span className="text-xl">
               {weatherData.current.condition.text}
