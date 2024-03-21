@@ -10,6 +10,7 @@ function Home() {
   const [error, setError] = useState(null);
   const [lat, setLat] = useState("");
   const [long, setLong] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const apiKey = "e58cc08c2a2a4646ae385025240803"; // Replace with your actual weather API key
   //  let cor = {lat}
@@ -46,19 +47,21 @@ function Home() {
     getLocation();
 
     try {
-     lat &&  fetch(
-        `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${lat},${long}`
-      )
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then((data) => {
-          setcurrentWeatherData(data);
-          setLoading(false);
-        });
+      lat &&
+        fetch(
+          `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${lat},${long}`
+        )
+          .then((response) => {
+            if (!response.ok) {
+              // throw new Error(`status: ${response.status}`);
+             
+            }
+            return response.json();
+          })
+          .then((data) => {
+            setcurrentWeatherData(data);
+            setLoading(false);
+          });
     } catch (error) {
       setLoading(false);
       console.error(error);
@@ -76,9 +79,25 @@ function Home() {
       )
         .then((response) => {
           if (!response.ok) {
-            throw new Error(`status: ${response.status}`);
+            // throw new Error(`status: ${response.status}`);
+            switch (response.status) {
+              case 400: setErrorMsg("no such city found");
+              break;
+              case 404 : setErrorMsg("error 404 not found")
+              break;
+              case 500 : setErrorMsg("server error")
+              break;
+        
+              default:
+                setErrorMsg("");
+                break;
+            }
+            console.log(response.status);
+
           }
-          return response.json();
+          if (response.ok) {
+            return response.json();
+          }
         })
         .then((data) => {
           setWeatherData(data);
@@ -136,9 +155,10 @@ function Home() {
       {loading && (
         <p className="text-2xl font-blue-500 font-semibold font-sans ">
           {" "}
-          Loading..{" "}
+          Loading..
         </p>
       )}
+      <p className="text-2xl font-blue-500 font-semibold font-sans ">{errorMsg}</p>
       {weatherData && (
         <div className="weather-card bg-white rounded-md shadow-md p-4 flex flex-col items-center gap-4">
           <h3 className=" text-2xl font-semibold ">
